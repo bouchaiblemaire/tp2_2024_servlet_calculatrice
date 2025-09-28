@@ -8,13 +8,13 @@ import java.util.Objects;
 
 /**
  *
- * @author kn_16
+ * @author blemaire
  */
 public class Operation {
     private String operator;
-    private String operande1;
-    private String operande2;
-    private double result;
+    private Integer operande1;
+    private Integer operande2;
+    private Double result;
 
     public Operation() {
     }
@@ -27,19 +27,19 @@ public class Operation {
         this.operator = operator;
     }
 
-    public String getOperande1() {
+    public Integer getOperande1() {
         return operande1;
     }
 
-    public void setOperande1(String operande1) {
+    public void setOperande1(Integer operande1) {
         this.operande1 = operande1;
     }
 
-    public String getOperande2() {
+    public Integer getOperande2() {
         return operande2;
     }
 
-    public void setOperande2(String operande2) {
+    public void setOperande2(Integer operande2) {
         this.operande2 = operande2;
     }
     

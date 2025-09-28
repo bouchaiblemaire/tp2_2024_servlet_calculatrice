@@ -1,10 +1,6 @@
 package fr.devavance.calculatrice.controller;
 
-/*
- * Click nbfs:nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs:nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-import fr.devavance.calculatrice.Operation;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import fr.devavance.calculatrice.Calculator;
 import fr.devavance.calculatrice.Operation;
 
+import fr.devavance.calculatrice.exceptions.OperatorException;
+import java.util.ArrayList;
+
 
 /**
  *
@@ -26,6 +25,22 @@ import fr.devavance.calculatrice.Operation;
 
 @WebServlet(urlPatterns = {"/calculate/*"})
 public class CalculatorController extends HttpServlet {
+    
+    private static ArrayList<String> permittedOperators = null;
+    
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        this.permittedOperators = new ArrayList<>();
+        
+        this.permittedOperators.add("add");
+        this.permittedOperators.add("sub");
+        this.permittedOperators.add("mul");
+        this.permittedOperators.add("div");
+        
+        
+    }
     
     //<editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -43,9 +58,7 @@ public class CalculatorController extends HttpServlet {
        
         Operation operation = new Operation();
   
-        extractParamsFromURLParamaters(request, operation);
-      
-        checkIfAllElementsOfOperationNotEmpty(operation);
+        extractAndCheckParamsFromURLParamaters(request, operation);
         
         proceedOperation(operation);
         
@@ -53,37 +66,33 @@ public class CalculatorController extends HttpServlet {
      
 
     }
+
     
     
-    private void extractParamsFromURLParamaters(HttpServletRequest request, 
+    private void extractAndCheckParamsFromURLParamaters(HttpServletRequest request, 
             Operation operation){
         
         String operator= request.getParameter("operation");
         String operande1= request.getParameter("operande1");
         String operande2= request.getParameter("operande2");
         
+        checkOperator(operator);
+          
+        Operandes operandes =  convertOperandesToInteger(operande1, operande2);
+        
         operation.setOperator(operator);
-        operation.setOperande1(operande1);
-        operation.setOperande2(operande2);
+        operation.setOperande1(operandes.getOperande1());
+        operation.setOperande2(operandes.getOperande2());
     }
     
     
-    private void checkIfAllElementsOfOperationNotEmpty(Operation operation) 
-            throws ServletException{
-        
-        String operator= operation.getOperator();
-        String operande1= operation.getOperande1();
-        String operande2= operation.getOperande2();
-                         
-        if (operator==null 
-            || operator.isEmpty() 
-            || operande1 == null
-            || operande1.isEmpty()
-            || operande2 == null 
-            || operande2.isEmpty()
-         ) 
-        throw new ServletException("Format de l'opérationi invalide !");
-        
+
+    private void checkOperator(String operator) throws OperatorException {
+        if (operator==null
+                || operator.isEmpty() 
+                || ! this.permittedOperators.contains(operator))
+            
+            throw new OperatorException();
     }
     
     
@@ -92,13 +101,11 @@ public class CalculatorController extends HttpServlet {
             throws ServletException{
             
         String operator= operation.getOperator();
-        String operande1= operation.getOperande1();
-        String operande2= operation.getOperande2();
+        Integer operande1= operation.getOperande1();
+        Integer operande2= operation.getOperande2();
         
         double result;
-            
-        
-         try {            
+                 
             if (operator.equals("add"))
                 result = Calculator.addition(operande1, 
                         operande2);
@@ -111,18 +118,9 @@ public class CalculatorController extends HttpServlet {
             else if (operator.equals("mul"))
                 result = Calculator.multiplication(operande1, 
                         operande2);
-            else throw new Exception("Opération invalide !");
-        }
-        catch(ArithmeticException e ){
-            throw new ServletException(e);
-        }
-        catch (NumberFormatException e) {
-               throw new ServletException(e);
-        }
-        catch (Exception e) {
-               throw new ServletException(e);
-        }       
-   
+            else throw new ServletException("Opération invalide !");
+        
+        
         operation.setResult(result);
         
     }
@@ -132,8 +130,8 @@ public class CalculatorController extends HttpServlet {
         
            
         String operator= operation.getOperator();
-        String operande1= operation.getOperande1();
-        String operande2= operation.getOperande2();
+        Integer operande1= operation.getOperande1();
+        Integer operande2= operation.getOperande2();
         double result = operation.getResult();
         
                
@@ -165,4 +163,42 @@ public class CalculatorController extends HttpServlet {
         }
     }
     
+    
+    
+    private static Operandes convertOperandesToInteger(
+                                       String s_operande_1, 
+                                       String s_operande_2) 
+                                 throws NumberFormatException{
+        
+        
+        Operandes operandes = new Operandes(
+                              Integer.parseInt(s_operande_1), 
+                              Integer.parseInt(s_operande_2) 
+                                   );
+        
+        return operandes;
+    }
+    
+    
+    private static class Operandes {
+        
+        private Integer operande1;
+        private Integer operande2;
+
+        public Operandes(Integer operande1, Integer operande2) {
+            this.operande1 = operande1;
+            this.operande2 = operande2;
+        }
+
+        public Integer getOperande1() {
+            return operande1;
+        }
+
+        public Integer getOperande2() {
+            return operande2;
+        }
+        
+        
+    }
+
 }
