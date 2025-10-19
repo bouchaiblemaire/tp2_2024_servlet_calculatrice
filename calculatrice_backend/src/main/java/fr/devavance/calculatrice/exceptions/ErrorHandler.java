@@ -51,24 +51,8 @@ public class ErrorHandler extends HttpServlet {
         // Réponse HTML avec boîte de dialogue stylisée
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
-        out.println("<!DOCTYPE html>");
-        out.println("<html><head><meta charset='UTF-8'><title>Erreur</title>");
-        out.println("<style>");
-        out.println("body { font-family: Arial, sans-serif; background-color: #f9f9f9; }");
-        out.println(".dialog { max-width: 500px; margin: 100px auto; padding: 20px;");
-        out.println(" background: #fff; border: 2px solid #e74c3c; border-radius: 10px;");
-        out.println(" box-shadow: 0 0 10px rgba(0,0,0,0.2); }");
-        out.println(".dialog h2 { color: #e74c3c; margin-top: 0; }");
-        out.println(".dialog p { font-size: 1.1em; }");
-        out.println("</style>");
-        out.println("</head><body>");
-        out.println("<div class='dialog'>");
-        out.println("<h2>⚠️ Erreur détectée</h2>");
-        out.println("<p>" + message + "</p>");
-        out.println("<p><a href='/calculatrice_etape_1'>Retour à l'accueil</a></p>");
-        out.println("</div>");
-        out.println("</body></html>");
+        out.println(String.format("<p>Erreur %s</p>", message));
+      
     }
 }
 
