@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.devavance.calculatrice;
+package fr.devavance.calculatrice.beans;
 
 import java.util.Objects;
 
@@ -14,11 +14,17 @@ public class Operation {
     private String operator;
     private Integer operande1;
     private Integer operande2;
+
+    public Operation(Integer operande1, Integer operande2) {
+        this.operande1 = operande1;
+        this.operande2 = operande2;
+    }
     private Double result;
 
     public Operation() {
     }
 
+    
     public String getOperator() {
         return operator;
     }
