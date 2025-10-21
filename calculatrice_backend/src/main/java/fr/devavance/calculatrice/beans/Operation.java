@@ -15,7 +15,14 @@ public class Operation {
     private Integer operande1;
     private Integer operande2;
 
-    public Operation(Integer operande1, Integer operande2) {
+    
+    public Operation( Integer operande1, Integer operande2) {
+        this.operande1 = operande1;
+        this.operande2 = operande2;
+    }
+        
+    public Operation(String operator, Integer operande1, Integer operande2) {
+        this.operator = operator;
         this.operande1 = operande1;
         this.operande2 = operande2;
     }

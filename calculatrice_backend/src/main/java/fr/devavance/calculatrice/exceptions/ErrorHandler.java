@@ -1,4 +1,4 @@
-package fr.devavance.calculatrice;
+package fr.devavance.calculatrice.exceptions;
 
 import fr.devavance.calculatrice.exceptions.OperatorException;
 import java.io.IOException;
@@ -12,6 +12,26 @@ import javax.servlet.http.HttpServletResponse;
 // Servlet mappée comme page d'erreur
 @WebServlet("/error-handler")
 public class ErrorHandler extends HttpServlet {
+ 
+    
+    public static final String  ORIGIN_OF_EXCEPTION = 
+            "javax.servlet.error.exception";
+    
+    public static final String STANDARD_MESSAGE = "Une erreur est survenue.";
+
+    public static final String CONVERSION_MESSAGE_ERROR=
+            "Erreur de conversion : format numérique incorrect."
+            + "\nou\nErreur de paramètres : nombre de paramètres incorrect.";
+    
+    public static final String ARITHMETIC_ERROR_MESSAGE
+            = "Erreur arithmétique : division par zéro ou opération invalide";
+    
+    public static final String OPERATOR_MESSAGE_ERROR = "Erreur d'opérateur : "
+            + "opérateur non reconnu ou invalide.";;
+    
+    public static final String INTERNAL_ERROR = "Erreur interne : ";
+    
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -24,29 +44,13 @@ public class ErrorHandler extends HttpServlet {
             throws ServletException, IOException {
         processError(request, response);
     }
-
-    private void processError(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        // Récupération de l'exception
-        Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
-        String message = "Une erreur est survenue.";
+    
 
     
-        if (throwable != null) {
-            
-            Class exceptionClass = throwable.getClass();
-            
-            if (exceptionClass ==  ArithmeticException.class) {
-                message = "Erreur arithmétique : division par zéro ou opération invalide.";
-            } else if (exceptionClass == NumberFormatException.class) {
-                message = "Erreur de conversion : format numérique incorrect.\nou\nErreur de paramètres : nombre de paramètres incorrect.";
-            } else if (exceptionClass == OperatorException.class) {
-                message = "Erreur d'opérateur : opérateur non reconnu ou invalide.";
-            } else {
-                message = "Erreur interne : " + throwable.getMessage();
-            }
-        }
+    public void processError(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        String ErrorMessage = processMessageFromRootOfException(request);
 
         // Réponse HTML avec boîte de dialogue stylisée
         response.setContentType("text/html;charset=UTF-8");
@@ -65,10 +69,42 @@ public class ErrorHandler extends HttpServlet {
         out.println("</head><body>");
         out.println("<div class='dialog'>");
         out.println("<h2>⚠️ Erreur détectée</h2>");
-        out.println("<p>" + message + "</p>");
+        out.println("<p>" + ErrorMessage + "</p>");
         out.println("<p><a href='/calculatrice_etape_1'>Retour à l'accueil</a></p>");
         out.println("</div>");
         out.println("</body></html>");
     }
+    
+    
+    /**
+     * Process un message build from the root of the erroe
+     * @param resquest : Request who is root of the exception
+     * @return message's explaning the root of the exception
+     */
+    private String processMessageFromRootOfException(HttpServletRequest request){
+        
+        // Récupération de l'exception
+        Throwable throwable = 
+            (Throwable) request.getAttribute(ErrorHandler.ORIGIN_OF_EXCEPTION);
+        
+        
+    
+        if (throwable != null) {
+            
+            Class exceptionClass = throwable.getClass();
+            
+            if (exceptionClass ==  ArithmeticException.class)
+                return ErrorHandler.ARITHMETIC_ERROR_MESSAGE;
+            if (exceptionClass == NumberFormatException.class)
+                return ErrorHandler.CONVERSION_MESSAGE_ERROR;
+            if (exceptionClass == OperatorException.class)
+                return ErrorHandler.OPERATOR_MESSAGE_ERROR;
+            
+            
+        }
+        return ErrorHandler.INTERNAL_ERROR + throwable.getMessage();
+
+    }
+        
 }
 

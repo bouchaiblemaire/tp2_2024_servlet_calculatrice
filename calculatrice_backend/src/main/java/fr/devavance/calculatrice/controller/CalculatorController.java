@@ -30,6 +30,8 @@ import java.util.List;
 @WebServlet(urlPatterns = {"/calculate/*"})
 public class CalculatorController extends HttpServlet implements IController {
     
+
+    
     private static List <String> permittedOperators = null;
     
 
@@ -57,7 +59,6 @@ public class CalculatorController extends HttpServlet implements IController {
   
         proceedOperation(operation);
         
-        System.out.println(operation);
         proceedView(response, operation);
      
 
@@ -86,17 +87,17 @@ public class CalculatorController extends HttpServlet implements IController {
         Integer operande2= operation.getOperande2();
         
         double result;
-                 
-            if (operator.equals("add"))
+        
+            if (operator.equals(IController.ADD_OPERATOR))
                 result = Calculator.addition(operande1, 
                         operande2);
-            else if (operator.equals("sub"))
+            else if (operator.equals(IController.SUB_OPERATOR))
                 result = Calculator.soustraction(operande1, 
                         operande2);
-            else if (operator.equals("div"))
+            else if (operator.equals(IController.DIV_OPERATOR))
                 result = Calculator.division(operande1, 
                         operande2);
-            else if (operator.equals("mul"))
+            else if (operator.equals(IController.MUL_OPERATOR))
                 result = Calculator.multiplication(operande1, 
                         operande2);
             else throw new InvalidOperation();
@@ -188,18 +189,21 @@ public class CalculatorController extends HttpServlet implements IController {
     }
 
     /**
-     * Create the opearation
+     * Create the operation
      * @param request
      * @return The operation to calculate
      * @throws NumberFormatException : Their is a problem with de conversion
      */
     private  Operation createOperation(HttpServletRequest request) {
-        String operator= request.getParameter("operation");
-        String operande1= request.getParameter("operande1");
-        String operande2= request.getParameter("operande2");    
+        String operator= request.getParameter(IController.URL_PARAM_OPERATOR);
+        String operande1= request.getParameter(IController.URL_PARAM_OPERANDE_1);
+        String operande2= request.getParameter(IController.URL_PARAM_OPERANDE_2);    
     
         Operation operationToCalculate =  
                 checkAndConvertOperandesToInteger(operande1, operande2);
+        
+        
+        operationToCalculate.setOperator(operator);
         
         return operationToCalculate;
     

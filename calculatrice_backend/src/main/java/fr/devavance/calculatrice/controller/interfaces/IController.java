@@ -15,7 +15,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface IController {
     
-    String [] permittedOperations = {"add", "sub", "mul", "div"};
+    public static final String URL_PARAM_OPERATOR = "operation";
+    public static final String URL_PARAM_OPERANDE_1 = "operande1";
+    public static final String URL_PARAM_OPERANDE_2 = "operande2";
+    public static final String ADD_OPERATOR = "add";
+    public static final String SUB_OPERATOR = "sub";
+    public static final String MUL_OPERATOR = "mul";
+    public static final String DIV_OPERATOR = "div";
+    
+    
+    String [] permittedOperations = {ADD_OPERATOR, SUB_OPERATOR, MUL_OPERATOR, DIV_OPERATOR};
     
         /**
      * Extract, check and validate the parameters for the Operation to
