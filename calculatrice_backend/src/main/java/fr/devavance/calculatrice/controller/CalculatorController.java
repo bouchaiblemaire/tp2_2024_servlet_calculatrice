@@ -9,13 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.devavance.calculatrice.Calculator;
 import fr.devavance.calculatrice.beans.Operation;
 import fr.devavance.calculatrice.controller.interfaces.IController;
-import fr.devavance.calculatrice.exceptions.InvalidOperation;
 
 import fr.devavance.calculatrice.exceptions.OperatorException;
-import java.util.ArrayList;
+import fr.devavance.calculatrice.factory.CalculatriceFactory.OperatorFactory;
+import fr.devavance.calculatrice.factory.operateur.interfaces.IOperateurFactory;
 import java.util.Arrays;
 import java.util.List;
 
@@ -86,22 +85,15 @@ public class CalculatorController extends HttpServlet implements IController {
         Integer operande1= operation.getOperande1();
         Integer operande2= operation.getOperande2();
         
-        double result;
+      
+        OperatorFactory operatorFactory = new OperatorFactory();
+         
+        IOperateurFactory operatorToEvaluate 
+                = operatorFactory.createOperator(operator);
+         
         
-            if (operator.equals(IController.ADD_OPERATOR))
-                result = Calculator.addition(operande1, 
-                        operande2);
-            else if (operator.equals(IController.SUB_OPERATOR))
-                result = Calculator.soustraction(operande1, 
-                        operande2);
-            else if (operator.equals(IController.DIV_OPERATOR))
-                result = Calculator.division(operande1, 
-                        operande2);
-            else if (operator.equals(IController.MUL_OPERATOR))
-                result = Calculator.multiplication(operande1, 
-                        operande2);
-            else throw new InvalidOperation();
         
+        Double result = operatorToEvaluate.evaluate(operande1, operande2);
         
         operation.setResult(result);
         
