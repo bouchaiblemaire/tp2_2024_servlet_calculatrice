@@ -2,11 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package fr.devavance.calculatrice.controller.interfaces;
+package fr.devavance.controler.interfaces;
 
-import fr.devavance.calculatrice.beans.Operation;
-import fr.devavance.metier.calculatrice.patterns.factory.caclators.factory.CalculatorFactory;
-import fr.devavance.metier.calculatrice.patterns.factory.interfaces.ICalculator;
+import fr.devavance.metier.Operation;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package fr.devavance.calculatrice.controller;
+package fr.devavance.controler;
 
 
 import java.io.IOException;
@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.devavance.calculatrice.beans.Operation;
+import fr.devavance.metier.Operation;
 import fr.devavance.calculatrice.controller.interfaces.IController;
-import fr.devavance.metier.calculatrice.Operator;
-import fr.devavance.metier.calculatrice.patterns.factory.caclators.factory.CalculatorFactory;
-import fr.devavance.metier.calculatrice.patterns.factory.interfaces.ICalculator;
+import fr.devavance.metier.Operator;
+
+import fr.devavance.controler.factory.CalculatorFactory;
+import fr.devavance.controler.interfaces.ICalculator;
+
 
 
 /**
