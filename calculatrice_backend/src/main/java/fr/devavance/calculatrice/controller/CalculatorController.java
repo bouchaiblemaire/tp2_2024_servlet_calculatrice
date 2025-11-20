@@ -11,12 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.devavance.calculatrice.beans.Operation;
 import fr.devavance.calculatrice.controller.interfaces.IController;
-
-import fr.devavance.calculatrice.exceptions.OperatorException;
-import fr.devavance.calculatrice.factory.CalculatriceFactory.OperatorFactory;
-import fr.devavance.calculatrice.factory.operateur.interfaces.IOperateurFactory;
-import java.util.Arrays;
-import java.util.List;
+import fr.devavance.metier.calculatrice.Operator;
+import fr.devavance.metier.calculatrice.patterns.factory.caclators.factory.CalculatorFactory;
+import fr.devavance.metier.calculatrice.patterns.factory.interfaces.ICalculator;
 
 
 /**
@@ -30,16 +27,7 @@ import java.util.List;
 public class CalculatorController extends HttpServlet implements IController {
     
 
-    
-    private static List <String> permittedOperators = null;
-    
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        this.permittedOperators = Arrays.asList(IController.permittedOperations);    
-    }
-    
     //<editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -67,48 +55,34 @@ public class CalculatorController extends HttpServlet implements IController {
     
     public Operation proceedParametersExtraction(HttpServletRequest request){
          
-        
-        Operation operationToCalculate = createOperation(request);
-        
-        checkOperator(operationToCalculate);
-        
-        return operationToCalculate;
+        Operation operationToEvaluate = createOperationFromHttpRequest(request);    
+        return operationToEvaluate;
           
     }
     
    
     
     
-     public void proceedOperation(Operation operation) {
+    public void proceedOperation(Operation operationToEvaluate) {
             
-        String operator= operation.getOperator();
-        Integer operande1= operation.getOperande1();
-        Integer operande2= operation.getOperande2();
-        
-      
-        OperatorFactory operatorFactory = new OperatorFactory();
-         
-        IOperateurFactory operatorToEvaluate 
-                = operatorFactory.createOperator(operator);
-         
-        
-        
-        Double result = operatorToEvaluate.evaluate(operande1, operande2);
-        
-        operation.setResult(result);
+
+        ICalculator calculatorRequested = 
+                new CalculatorFactory().createCalculator(operationToEvaluate);
+                
+        calculatorRequested.calculate(operationToEvaluate);
         
     }
      
   
     
-      public void proceedView(HttpServletResponse response, Operation operation) 
+      public void proceedView(HttpServletResponse response, Operation ViewDataOperation) 
             throws IOException{
         
            
-        String operator= operation.getOperator();
-        Integer operande1= operation.getOperande1();
-        Integer operande2= operation.getOperande2();
-        double result = operation.getResult();
+        Operator operator= ViewDataOperation.getOperator();
+        Integer operande1= ViewDataOperation.getOperande1();
+        Integer operande2= ViewDataOperation.getOperande2();
+        double result = ViewDataOperation.getResult();
         
                
         response.setContentType("text/html;charset=UTF-8");
@@ -140,24 +114,6 @@ public class CalculatorController extends HttpServlet implements IController {
     }
     
     
-
-    /**
-     * Check the validity of the operator
-     * @param operationToCalculate : Operation to calculate
-     * @throws OperatorException : The operator is not permitted
-     */
-    private  void checkOperator(Operation operationToCalculate) 
-            throws OperatorException {
-        if (operationToCalculate.getOperator()==null
-            || operationToCalculate.getOperator().isEmpty() 
-            || ! this.permittedOperators.contains(operationToCalculate.getOperator())
-            )
-        
-            throw new OperatorException();
-    }
-    
-    
-    
     
     /**
      * check and convert the operands from String to int
@@ -181,25 +137,27 @@ public class CalculatorController extends HttpServlet implements IController {
     }
 
     /**
-     * Create the operation
+     * Create the operation from the URL HTTP Request
      * @param request
-     * @return The operation to calculate
+     * @return The operation to evaluate
      * @throws NumberFormatException : Their is a problem with de conversion
      */
-    private  Operation createOperation(HttpServletRequest request) {
+    private  Operation createOperationFromHttpRequest(HttpServletRequest request) {
+        
         String operator= request.getParameter(IController.URL_PARAM_OPERATOR);
         String operande1= request.getParameter(IController.URL_PARAM_OPERANDE_1);
         String operande2= request.getParameter(IController.URL_PARAM_OPERANDE_2);    
-    
-        Operation operationToCalculate =  
-                checkAndConvertOperandesToInteger(operande1, operande2);
+
         
+        Operation operationToCalculate 
+                = checkAndConvertOperandesToInteger(operande1, operande2);
         
-        operationToCalculate.setOperator(operator);
+        operationToCalculate.setOperator(Operator.valueOfLabel(operator));
         
         return operationToCalculate;
     
     }
-    
+
+   
 
 }

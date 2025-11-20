@@ -5,6 +5,8 @@
 package fr.devavance.calculatrice.controller.interfaces;
 
 import fr.devavance.calculatrice.beans.Operation;
+import fr.devavance.metier.calculatrice.patterns.factory.caclators.factory.CalculatorFactory;
+import fr.devavance.metier.calculatrice.patterns.factory.interfaces.ICalculator;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,14 +20,9 @@ public interface IController {
     public static final String URL_PARAM_OPERATOR = "operation";
     public static final String URL_PARAM_OPERANDE_1 = "operande1";
     public static final String URL_PARAM_OPERANDE_2 = "operande2";
-    public static final String ADD_OPERATOR = "add";
-    public static final String SUB_OPERATOR = "sub";
-    public static final String MUL_OPERATOR = "mul";
-    public static final String DIV_OPERATOR = "div";
+
     
-    
-    String [] permittedOperations = {ADD_OPERATOR, SUB_OPERATOR, MUL_OPERATOR, DIV_OPERATOR};
-    
+
         /**
      * Extract, check and validate the parameters for the Operation to
      * calculate
@@ -36,13 +33,15 @@ public interface IController {
     
     
     
-    /**
-     * Calculate the Operation
-     * @param operation : Operation with the result
-     * @throws InvalidOperation
+     /**
+     * Proceed for the requested Operation
+     * 
+     * @param operationToEvaluate operation with the result appended
+     * @throws InvalidOperation 
      */
-    public void proceedOperation(Operation operation);
-    
+        public void proceedOperation(Operation operationToEvaluate);
+       
+     
     
     /**
      * Proceed the view to the client

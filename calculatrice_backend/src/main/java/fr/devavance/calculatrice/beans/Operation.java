@@ -4,39 +4,44 @@
  */
 package fr.devavance.calculatrice.beans;
 
+import fr.devavance.metier.calculatrice.Operator;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author blemaire
  */
-public class Operation {
-    private String operator;
+public class Operation implements Serializable {
+    private Operator operator;
     private Integer operande1;
     private Integer operande2;
+    private Double result;
 
     
+    
+    public Operation() {
+    }
+
+       
     public Operation( Integer operande1, Integer operande2) {
         this.operande1 = operande1;
         this.operande2 = operande2;
     }
         
-    public Operation(String operator, Integer operande1, Integer operande2) {
+    public Operation(Operator operator, Integer operande1, Integer operande2) {
         this.operator = operator;
         this.operande1 = operande1;
         this.operande2 = operande2;
     }
-    private Double result;
 
-    public Operation() {
-    }
-
+ 
     
-    public String getOperator() {
+    public Operator getOperator() {
         return operator;
     }
 
-    public void setOperator(String operator) {
+    public void setOperator(Operator operator) {
         this.operator = operator;
     }
 
