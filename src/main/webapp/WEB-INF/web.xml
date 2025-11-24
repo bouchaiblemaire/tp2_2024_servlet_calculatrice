@@ -3,6 +3,8 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
    version="4.0">
+    
+    <description>Demo du contrôleur de la calculatrice du tp2 étape 1 portant sur les servlets (projet :tp2_devavance_calculatrice)</description>
     <session-config>
         <session-timeout>
             30
