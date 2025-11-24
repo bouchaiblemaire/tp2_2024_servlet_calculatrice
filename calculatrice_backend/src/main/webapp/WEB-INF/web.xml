@@ -13,26 +13,9 @@
     
      <error-page>
   	<error-code>404</error-code>
-  	<location>/images/error-404.png</location>
+  	<location>/AppExceptionHandler</location>
   </error-page>
-       <error-page>
-           <exception-type>java.lang.ArithmeticException</exception-type>
-  	<location>/error-handler</location>
-  </error-page>
-
-<error-page>
-    <exception-type>java.lang.NumberFormatException</exception-type>
-    <location>/error-handler</location>
-</error-page>
-<error-page>
-    <exception-type>fr.devavance.calculatrice.exceptions.NumberOfParameterException</exception-type>
-    <location>/Eerror-handler</location>
-</error-page>
-<error-page>
-    <exception-type>fr.devavance.calculatrice.exceptions.OperatorException</exception-type>
-    <location>/error-handler</location>
-</error-page>
-
+  
   
   <welcome-file-list>
       <welcome-file>index.html</welcome-file>
