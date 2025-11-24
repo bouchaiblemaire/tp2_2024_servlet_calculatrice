@@ -1,3 +1,11 @@
+<%-- 
+    Document   : index
+    Created on : 14 août 2023, 15:26:47
+    Author     : BL
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,20 +19,11 @@
         <code>http://ip_serveur/calculatrice/calculate/operation/operande_1/operande_2</code>
             -->
             
-               <form action="http://localhost:8080/calculatrice/calculate"  method="get">
+               <form action="/calculatrice/calculate"  method="get">
            <p>Opérande 1 : <input type="text" name="operande1" /></p>
            <p>Opérande 2 : <input type="text" name="operande2" /></p>
-           
-           <select name="operation">
-               <option value="add">+</option>>
-               <option value="add">-</option>>
-               <option value="add">/</option>>
-               <option value="add">*</option>>
-               
-           </select>
-               
-               
-           <p><input type="submit"  value="Calculer" /></p>
+           <p>Opérateur : <input type="text" name="operateur" /></p>
+           <p><input type="submit"  value="valider" /></p>
         </form>
         </div>
     </body>

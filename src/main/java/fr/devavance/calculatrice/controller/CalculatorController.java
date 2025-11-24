@@ -14,21 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.devavance.calculatrice.beans.Calculator;
-import fr.devavance.calculatrice.beans.ParseCRUD;
-import fr.devavance.calculatrice.exception.CalculatorException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.StringTokenizer;
+import fr.devavance.calculatrice.beans.Operation;
+import javax.servlet.RequestDispatcher;
+
 /**
- *
  * @author marmotton
  */
-@WebServlet(urlPatterns = {"/calculate/*"})
+@WebServlet(name="CalculatorController", urlPatterns = {"/calculate/*"})
 public class CalculatorController extends HttpServlet {
 
     
-
-     //<editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -41,43 +38,47 @@ public class CalculatorController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-  
+ 
         
-       if (request.getPathInfo() == null ) throw new ServletException("Pas d'arguments !");
-        
-       response.setContentType("text/html;charset=UTF-8");
-  
-  
-       PrintWriter out = response.getWriter();
-              
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Calculator</title>");            
-            out.println("</head>");
-            out.println("<body>");
+            request.setCharacterEncoding("UTF-8") ;
+	    
+            // Récupération des données
+            String s_operande1 = request.getParameter("operande1") ;
+            String s_operande2 = request.getParameter("operande2") ;
+            String s_operateur = request.getParameter("operateur") ;
             
             
-            /* Question 1 */
-            out.println("<p> request.getContextPath() : "+ request.getContextPath() + "</p>");
-            out.println("<p> request.getPathInfo() : "+ request.getPathInfo()+ "</p>");
-            
-            /* Question 2 */
-            try {
-                HashMap <String, String> crud_args = ParseCRUD.parsePathInfo(request);
-                out.println(crud_args.toString());
+             
+            if (s_operande1==null || s_operande2==null || s_operateur==null){
+                RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+                rd.forward(request, response);
             }
-            catch(CalculatorException e){
+            
+     
+            // Calcul du résultat
+            double resultat=0.0;
+            
+            try {
+                resultat = Calculator.add(s_operande1, s_operande2);
+            }
+            catch(NumberFormatException e){
                 throw new ServletException(e);
             }
+    
+            
+            Operation operation = new Operation(s_operande1, 
+                    s_operande2, 
+                    s_operateur, 
+                    String.valueOf(resultat)
+            );
             
             
-            
-             out.println("<p>"+Calculator.add("12","20") + "</p>");
-            out.println("</body>");
-            out.println("</html>");
-            
-            out.close();
+            // Activation de la vue resultat
+            RequestDispatcher rd = request.getRequestDispatcher("result.jsp");
+            request.setAttribute("operation", operation);    
+            rd.forward(request, response);
+                 
+      
     
     }
 
