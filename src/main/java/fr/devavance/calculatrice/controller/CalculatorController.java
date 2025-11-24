@@ -26,8 +26,7 @@ import fr.devavance.calculatrice.Operation;
 // Pour serveur Tomcat de démonstration
 //@WebServlet(urlPatterns = {"/calculate/etape_1/*"}) 
 @WebServlet(urlPatterns = {"/calculate/*"})
-public class CalculatorController extends HttpServlet {
-    
+public class CalculatorController extends HttpServlet { 
     //<editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

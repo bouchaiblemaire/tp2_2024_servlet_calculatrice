@@ -52,7 +52,6 @@ public class Calculator {
      * @param s_operande_2 : seconde opérande
      * @return somme des deux opérances
      * @throws NumberFormatException 
-     * @throws ArithmeticException
      */
     public static double division(String s_operande_1, 
                                   String s_operande_2) 
